@@ -44,7 +44,13 @@ Step-by-Step:
 3. Return the filtered result.
 */
 
-
+function filterProducts(inputArr, callbackFunction) {
+  return inputArr.filter(callbackFunction);
+}
+console.log(
+  "Products in stock",
+  filterProducts(products, (objectName) => objectName.inStock === true)
+);
 /*
 🔹 Task 2: Transform Product Names
 
@@ -56,7 +62,8 @@ Step-by-Step:
 3. Store the result in a new variable.
 */
 
-
+const nameArray = products.map((objectName) => objectName.name.toUpperCase());
+console.log("Uppercase name:", nameArray);
 /*
 🔹 Task 3: Generate Discounted Prices
 
@@ -70,8 +77,24 @@ Step-by-Step:
 3. Use this returned function inside a `map()` call to apply discounts to all products.
 */
 
+function applyDiscount(discountPercent) {
+  return function (objectName) {
+    return objectName.price * ((100 - discountPercent) / 100);
+  };
+}
+const discountAmount = applyDiscount(30);
+
+let discountPriceArray = products.map((objectName) => {
+  return {
+    ...objectName,
+    price: discountAmount(objectName),
+  };
+});
+console.log("Test the original", products); // test to make sure we didn't change the original.
+console.log("Discounted Products", discountPriceArray);
 
 /*
+
 🔹 Task 4: Calculate Total Inventory Value
 
 Use `reduce()` to calculate the total value of products that are currently in stock.
@@ -81,7 +104,19 @@ Step-by-Step:
 2. Add only the prices of products where `inStock` is true.
 3. Store the total in a new variable.
 */
+const valueOfProductFilter = filterProducts(
+  products,
+  (objectName) => objectName.inStock === true
+);
+console.log("filtered list to in-stock items only", valueOfProductFilter);
 
+function sumValue(inputArr, callbackFunction) {
+  return inputArr.reduce(callbackFunction, 0);
+}
+console.log(
+  "Value of instock products: ",
+  sumValue(valueOfProductFilter, (acc, element) => acc + element.price)
+);
 
 // ============================================
 // 🧪 Console Test Your Work
